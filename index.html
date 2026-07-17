@@ -1,0 +1,950 @@
+<!DOCTYPE html><html lang="ru"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Тренажёр Модуля 4 · Криптоакадемия Гунсамбо</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1e1035; --muted:#6b6088; --e900:#2e1065; --e700:#4c1d95; --e600:#6d28d9;
+  --e500:#7c3aed; --g400:#a78bfa; --g300:#c4b5fd; --mint:#f3efff; --line:#e6ddfb;
+  --ok:#0d8a4a; --okbg:#e8f8ef; --bad:#c02626; --badbg:#fdeaea;
+  --warn:#8a5a00; --warnbg:#fff5e0;
+  --up:#16b979; --down:#ef4a4a;
+  --sh:0 12px 30px -14px rgba(46,16,101,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Manrope,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#f5f4fb;color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:60px}
+
+header{background:linear-gradient(135deg,var(--e900),var(--e700));color:#fff;padding:18px 24px 0}
+.hwrap{max-width:1180px;margin:0 auto}
+.htop{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.brand{font-size:21px;font-weight:800;letter-spacing:-.01em}
+.brand span{color:var(--g300);font-weight:700;font-size:12.5px;display:block;letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.stats{margin-left:auto;display:flex;gap:9px;flex-wrap:wrap}
+.stat{background:#ffffff17;border:1px solid #ffffff2b;border-radius:12px;padding:7px 13px;min-width:74px;text-align:center}
+.stat b{display:block;font-size:18px;font-weight:800;line-height:1.2}
+.stat i{font-style:normal;font-size:10.5px;color:#d0c4f7;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.stat.fire b{color:#ffd98a}
+.stat.pos b{color:#7ee6b0} .stat.neg b{color:#ffa3a3}
+
+/* верхние вкладки-приложения */
+.apps{display:flex;gap:6px;margin-top:16px;flex-wrap:wrap}
+.app{background:#ffffff12;border:1px solid #ffffff20;border-bottom:none;color:#d8ccfb;
+  border-radius:12px 12px 0 0;padding:12px 20px;font-weight:800;font-size:15px;cursor:pointer;transition:.15s}
+.app:hover{background:#ffffff22}
+.app.on{background:#f5f4fb;color:var(--e700);border-color:transparent}
+.app em{font-style:normal;opacity:.6;font-weight:700;font-size:12.5px;display:block;margin-top:1px}
+.app.on em{opacity:.65;color:var(--muted)}
+
+.modes{max-width:1180px;margin:18px auto 0;padding:0 24px;display:flex;gap:9px;flex-wrap:wrap}
+.mode{background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:9px 16px;font-weight:700;
+  font-size:14.5px;color:var(--muted);cursor:pointer;transition:.15s;user-select:none}
+.mode:hover{border-color:var(--g400)}
+.mode.on{background:var(--e600);border-color:var(--e600);color:#fff;box-shadow:var(--sh)}
+.mode small{opacity:.7;font-weight:600;margin-left:5px}
+
+main{max-width:1180px;margin:18px auto;padding:0 24px}
+.card{background:#fff;border-radius:20px;box-shadow:var(--sh);overflow:hidden;margin-bottom:18px}
+.cardtop{padding:16px 24px;border-bottom:1px solid #f0edf9;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--e600);
+  background:var(--mint);padding:5px 11px;border-radius:20px}
+.sym{font-size:15px;font-weight:700;color:var(--muted)}
+.qnum{margin-left:auto;font-size:13px;font-weight:700;color:#a49bbd}
+.q{padding:16px 24px 6px;font-size:21px;font-weight:800;letter-spacing:-.01em}
+.hint{padding:0 24px 12px;font-size:14px;color:var(--muted);font-weight:600}
+canvas{width:100%;display:block;background:#fff;cursor:crosshair;touch-action:none}
+.chartwrap{position:relative;margin:0 12px;border:1px solid #f0edf9;border-radius:14px;overflow:hidden}
+
+.answers{padding:16px 24px 6px;display:flex;gap:10px;flex-wrap:wrap}
+.opt{flex:1;min-width:150px;background:#fff;border:1.8px solid var(--line);border-radius:13px;padding:14px 16px;
+  font-weight:700;font-size:15.5px;cursor:pointer;transition:.13s;text-align:center;color:var(--ink)}
+.opt:hover{border-color:var(--g400);background:#faf8ff}
+.opt.sel{border-color:var(--e600);background:var(--mint);color:var(--e700)}
+.opt.right{border-color:var(--ok);background:var(--okbg);color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--badbg);color:var(--bad)}
+
+.fc{padding:6px 24px 0}
+.fc .lab{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.fcbtns{display:flex;gap:10px}
+.fcb{flex:1;border:1.8px solid var(--line);border-radius:13px;padding:13px;font-weight:800;font-size:15.5px;
+  cursor:pointer;background:#fff;transition:.13s}
+.fcb.up{color:var(--up)} .fcb.down{color:var(--down)}
+.fcb:hover{border-color:var(--g400)}
+.fcb.sel{border-width:2.4px;background:#faf8ff}
+.fcb.right{border-color:var(--ok);background:var(--okbg)}
+.fcb.wrong{border-color:var(--bad);background:var(--badbg)}
+
+.bar{padding:18px 24px 22px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{background:var(--e600);color:#fff;border:none;border-radius:13px;padding:14px 26px;font-weight:800;
+  font-size:15.5px;cursor:pointer;font-family:inherit;transition:.15s;box-shadow:var(--sh)}
+.btn:hover{background:var(--e500)}
+.btn[disabled]{background:#d9d2ee;box-shadow:none;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--e700);border:1.8px solid var(--line);box-shadow:none}
+.btn.ghost:hover{border-color:var(--g400);background:#faf8ff}
+
+.verdict{margin:0 24px 22px;border-radius:15px;padding:18px 22px;display:none}
+.verdict.show{display:block}
+.verdict.good{background:var(--okbg);border-left:4px solid var(--ok)}
+.verdict.bad{background:var(--badbg);border-left:4px solid var(--bad)}
+.verdict h4{font-size:18px;font-weight:800;margin-bottom:7px}
+.verdict.good h4{color:var(--ok)} .verdict.bad h4{color:var(--bad)}
+.verdict p{font-size:15px;line-height:1.5;font-weight:600;color:#3a2e55}
+.verdict p+p{margin-top:6px}
+.verdict b{color:var(--e700)}
+.note{margin-top:10px;padding:11px 13px;background:var(--warnbg);border-radius:9px;color:var(--warn);font-size:14.5px;line-height:1.5}
+
+.prog{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.pc{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:var(--sh)}
+.pc .t{font-size:12.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.pc .n{font-size:22px;font-weight:800;color:var(--e700)}
+.pc .n small{font-size:13.5px;color:#a49bbd;font-weight:700}
+.pbar{height:7px;background:#eee9f8;border-radius:6px;margin-top:9px;overflow:hidden}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--e500),var(--g400));border-radius:6px;transition:.4s}
+.reset{text-align:right}
+.reset button{background:none;border:none;color:#a49bbd;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:underline}
+
+/* ---------- СИМУЛЯТОР ---------- */
+.simtools{padding:14px 24px 4px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.tool{border:1.8px solid var(--line);border-radius:12px;padding:11px 16px;font-weight:800;font-size:14.5px;
+  cursor:pointer;background:#fff;transition:.13s;display:flex;align-items:center;gap:8px}
+.tool:hover{border-color:var(--g400)}
+.tool.on{border-width:2.4px}
+.tool .dot{width:11px;height:11px;border-radius:3px}
+.tool.entry .dot{background:#3a2fff} .tool.entry.on{border-color:#3a2fff;background:#eeecff}
+.tool.stop .dot{background:var(--down)} .tool.stop.on{border-color:var(--down);background:var(--badbg)}
+.tool.take .dot{background:var(--ok)}  .tool.take.on{border-color:var(--ok);background:var(--okbg)}
+.tool.done{opacity:.55}
+.deposit{margin-left:auto;display:flex;gap:8px;align-items:center;font-weight:700;font-size:14px;color:var(--muted)}
+.deposit input{width:96px;border:1.8px solid var(--line);border-radius:10px;padding:9px 11px;font-family:inherit;
+  font-weight:800;font-size:14.5px;color:var(--ink);text-align:right}
+.deposit input:focus{outline:none;border-color:var(--g400)}
+
+.calc{margin:14px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.cc{background:#faf8ff;border:1px solid var(--line);border-radius:13px;padding:12px 14px}
+.cc .t{font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.cc .v{font-size:19px;font-weight:800;margin-top:4px;color:var(--e700)}
+.cc.warn{background:var(--warnbg);border-color:#f0dcae} .cc.warn .v{color:var(--warn)}
+.cc.good{background:var(--okbg);border-color:#bce8d1} .cc.good .v{color:var(--ok)}
+.cc.bad{background:var(--badbg);border-color:#f2c9c9}  .cc.bad .v{color:var(--bad)}
+.simmsg{margin:12px 24px 0;font-size:14.5px;font-weight:600;color:var(--muted)}
+
+.journal{padding:0 24px 22px}
+.journal h3{font-size:16px;font-weight:800;margin:6px 0 12px;color:var(--e700)}
+.jrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid #f2eefb;font-size:14.5px;font-weight:700}
+.jrow .s{width:88px;color:var(--muted);font-weight:700}
+.jrow .r{margin-left:auto;font-weight:800}
+.jrow .r.p{color:var(--ok)} .jrow .r.m{color:var(--bad)}
+.eq{height:70px;width:100%;display:block;margin-top:6px}
+
+/* ---------- КАРТОЧКИ ---------- */
+.timerbar{height:6px;background:#eee9f8;overflow:hidden}
+.timerbar i{display:block;height:100%;background:linear-gradient(90deg,var(--e500),var(--g400));width:100%;
+  transition:width .1s linear}
+.timerbar.hot i{background:linear-gradient(90deg,#ef4a4a,#ffb199)}
+.cardsbig{padding:8px 24px 0;font-size:14px;font-weight:700;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+.cardsbig b{color:var(--e700)}
+
+.hidden{display:none!important}
+
+@media(max-width:640px){
+  .q{font-size:18px} .stat{min-width:62px;padding:6px 9px} .stat b{font-size:15px}
+  .opt{min-width:calc(50% - 5px);font-size:14px;padding:12px 8px}
+  .brand{font-size:17px} .app{padding:10px 13px;font-size:13.5px}
+  .deposit{margin-left:0;width:100%}
+}
+</style></head><body>
+
+<header><div class="hwrap">
+  <div class="htop">
+    <div class="brand">Тренажёр Модуля 4<span>Криптоакадемия Гунсамбо</span></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <div class="apps" id="apps"></div>
+</div></header>
+
+<!-- ================= 1. РАЗМЕЧАЙ ГРАФИК ================= -->
+<div id="appMark">
+  <div class="modes" id="modes"></div>
+  <main>
+    <div class="card">
+      <div class="cardtop"><span class="tag" id="tTag">—</span><span class="sym" id="tSym">—</span>
+        <span class="qnum" id="tNum">—</span></div>
+      <div class="q" id="tQ">—</div>
+      <div class="hint" id="tHint"></div>
+      <div class="chartwrap"><canvas id="chart"></canvas></div>
+      <div class="answers" id="tOpts"></div>
+      <div class="fc">
+        <div class="lab">И главное — куда пойдёт цена дальше?</div>
+        <div class="fcbtns">
+          <button class="fcb up" data-d="up">▲ Вверх</button>
+          <button class="fcb down" data-d="down">▼ Вниз</button>
+        </div>
+      </div>
+      <div class="bar">
+        <button class="btn" id="bCheck" disabled>Что было дальше →</button>
+        <button class="btn ghost hidden" id="bNext">Следующий график</button>
+        <button class="btn ghost" id="bSkip">Пропустить</button>
+      </div>
+      <div class="verdict" id="tVerdict"></div>
+    </div>
+    <div class="prog" id="prog"></div>
+    <div class="reset"><button onclick="resetAll()">сбросить прогресс</button></div>
+  </main>
+</div>
+
+<!-- ================= 2. СИМУЛЯТОР СДЕЛКИ ================= -->
+<div id="appSim" class="hidden">
+  <main>
+    <div class="card">
+      <div class="cardtop"><span class="tag">Риск-менеджмент</span><span class="sym" id="sSym">—</span>
+        <span class="qnum" id="sNum">—</span></div>
+      <div class="q">Собери сделку: вход, стоп и цель</div>
+      <div class="hint">Выбери инструмент и кликни по графику. Дашборд посчитает риск и объём под твой депозит.</div>
+
+      <div class="simtools">
+        <div class="tool entry on" data-k="entry"><span class="dot"></span>Вход</div>
+        <div class="tool stop"     data-k="stop"><span class="dot"></span>Стоп</div>
+        <div class="tool take"     data-k="take"><span class="dot"></span>Цель</div>
+        <button class="btn ghost" id="sClear" style="padding:10px 15px;font-size:14px">Сбросить точки</button>
+        <div class="deposit">Депозит
+          <input id="sDep" type="number" value="10000" min="1000" step="1000"> ₽
+          &nbsp;· риск
+          <input id="sRisk" type="number" value="2" min="0.5" max="10" step="0.5" style="width:64px"> %
+        </div>
+      </div>
+
+      <div class="chartwrap" style="margin-top:12px"><canvas id="simchart"></canvas></div>
+      <div class="calc" id="sCalc"></div>
+      <div class="simmsg" id="sMsg">Поставь все три точки — вход, стоп и цель.</div>
+
+      <div class="bar">
+        <button class="btn" id="sRun" disabled>Запустить сделку →</button>
+        <button class="btn ghost hidden" id="sNext">Следующий график</button>
+        <button class="btn ghost" id="sSkip">Пропустить</button>
+      </div>
+      <div class="verdict" id="sVerdict"></div>
+    </div>
+
+    <div class="card">
+      <div class="journal">
+        <h3>Дневник сделок</h3>
+        <div class="prog" id="sStats" style="margin-bottom:6px"></div>
+        <canvas class="eq" id="eq"></canvas>
+        <div id="sJournal"></div>
+      </div>
+    </div>
+    <div class="reset"><button onclick="resetSim()">очистить дневник</button></div>
+  </main>
+</div>
+
+<!-- ================= 3. КАРТОЧКИ ================= -->
+<div id="appCards" class="hidden">
+  <main>
+    <div class="card">
+      <div class="timerbar" id="cBar"><i></i></div>
+      <div class="cardtop"><span class="tag">Насмотренность</span><span class="sym" id="cSym">—</span>
+        <span class="qnum" id="cTime">—</span></div>
+      <div class="q">Что за фигура? Быстро.</div>
+      <div class="cardsbig" id="cInfo"></div>
+      <div class="chartwrap" style="margin-top:10px"><canvas id="cchart"></canvas></div>
+      <div class="answers" id="cOpts"></div>
+      <div class="bar">
+        <button class="btn ghost hidden" id="cNext">Следующая →</button>
+      </div>
+      <div class="verdict" id="cVerdict"></div>
+    </div>
+    <div class="prog" id="cProg"></div>
+    <div class="reset"><button onclick="resetCards()">сбросить насмотренность</button></div>
+  </main>
+</div>
+
+<script src="tasks.js"></script>
+<script>
+// ==================== общее ====================
+const $ = id => document.getElementById(id);
+const fmt = v => v>=1000 ? Math.round(v).toLocaleString('ru-RU')
+              : v>=10   ? v.toFixed(1) : v.toFixed(4);
+const rub = v => Math.round(v).toLocaleString('ru-RU')+' ₽';
+const shuffle = a => { for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; };
+
+const TYPES = {
+  all:     {name:'Все подряд', tag:'Микс'},
+  trend:   {name:'Тренд',      tag:'Урок 4'},
+  level:   {name:'Уровни',     tag:'Урок 3'},
+  pattern: {name:'Паттерны',   tag:'Урок 5'},
+  rsi:     {name:'RSI',        tag:'Урок 6'},
+};
+
+// ---- хранилище ----
+const K='gunsambo_trainer_v2';
+const DEF = {
+  mark:{score:0,streak:0,done:0,right:0,
+        by:{trend:{d:0,r:0},level:{d:0,r:0},pattern:{d:0,r:0},rsi:{d:0,r:0}}},
+  sim:{bal:null, dep:10000, risk:2, trades:[]},
+  cards:{seen:{}, done:0, right:0}
+};
+let ST = Object.assign({}, DEF, JSON.parse(localStorage.getItem(K)||'null')||{});
+ST.mark = Object.assign({}, DEF.mark, ST.mark);
+ST.sim  = Object.assign({}, DEF.sim,  ST.sim);
+ST.cards= Object.assign({}, DEF.cards,ST.cards);
+const save = () => localStorage.setItem(K, JSON.stringify(ST));
+
+// ==================== движок графика ====================
+function makeChart(canvas){
+  const cx = canvas.getContext('2d');
+  const G = {};
+  G.draw = (opt) => {
+    const {setup, future=[], revealed=0, rsi=null, rsifuture=[], lines=[], zones=[], marks=null} = opt;
+    const w = canvas.parentElement.clientWidth;
+    const h = Math.max(300, Math.min(430, Math.round(w*0.46)));
+    const dpr = devicePixelRatio||1;
+    canvas.width=w*dpr; canvas.height=h*dpr;
+    canvas.style.width=w+'px'; canvas.style.height=h+'px';
+    cx.setTransform(dpr,0,0,dpr,0,0);
+
+    const hasR = !!rsi;
+    const padR=62, padL=6, padT=10, padB=hasR?6:22;
+    const rsiH = hasR ? Math.round(h*0.27) : 0;
+    const gap  = hasR ? 10 : 0;
+    const priceH = h - padT - padB - rsiH - gap;
+
+    const shown = setup.concat(future.slice(0,revealed));
+    const total = setup.length + future.length;
+    let lo=Math.min(...shown.map(k=>k[3])), hi=Math.max(...shown.map(k=>k[2]));
+    lines.forEach(l=>{ if(l.p!=null){ lo=Math.min(lo,l.p); hi=Math.max(hi,l.p); } });
+    if(marks){
+      marks.points.forEach(x=>{ lo=Math.min(lo,x.p); hi=Math.max(hi,x.p); });
+      marks.hlines.forEach(x=>{ lo=Math.min(lo,x.p); hi=Math.max(hi,x.p); });
+      marks.lines.forEach(x=>{ lo=Math.min(lo,x.p0,x.p1); hi=Math.max(hi,x.p0,x.p1); });
+    }
+    const pad=(hi-lo)*0.08 || 1;
+    const YLO=lo-pad, YHI=hi+pad;
+    const W = w - padL - padR, cw = W/total;
+    const X = i => padL + i*cw + cw/2;
+    const Y = p => padT + priceH - (p-YLO)/(YHI-YLO)*priceH;
+    Object.assign(G,{w,h,padT,padL,padR,priceH,YLO,YHI,X,Y,
+      invY: y => YLO + (padT+priceH-y)/priceH*(YHI-YLO)});
+
+    cx.clearRect(0,0,w,h);
+    cx.strokeStyle='#f1eefa'; cx.lineWidth=1;
+    cx.font='11px Manrope, sans-serif'; cx.fillStyle='#a49bbd'; cx.textAlign='left';
+    for(let i=0;i<=5;i++){
+      const p=YLO+(YHI-YLO)*i/5, y=Y(p);
+      cx.beginPath(); cx.moveTo(padL,y); cx.lineTo(w-padR,y); cx.stroke();
+      cx.fillText(fmt(p), w-padR+7, y+4);
+    }
+    // зоны (например область стоп/цель)
+    zones.forEach(z=>{
+      cx.save(); cx.fillStyle=z.c;
+      const y1=Y(z.a), y2=Y(z.b);
+      cx.fillRect(padL, Math.min(y1,y2), w-padR-padL, Math.abs(y2-y1)); cx.restore();
+    });
+    const fx = padL + setup.length*cw;
+    if(revealed>0){ cx.save(); cx.fillStyle='rgba(124,58,237,.045)';
+      cx.fillRect(fx,padT,w-padR-fx,priceH); cx.restore(); }
+    cx.save(); cx.strokeStyle='#c4b5fd'; cx.setLineDash([5,4]); cx.lineWidth=1.6;
+    cx.beginPath(); cx.moveTo(fx,padT); cx.lineTo(fx,padT+priceH); cx.stroke(); cx.restore();
+
+    const bw=Math.max(1.4, cw*0.66);
+    shown.forEach((k,i)=>{
+      const up=k[4]>=k[1], col=up?'#16b979':'#ef4a4a', x=X(i);
+      cx.strokeStyle=col; cx.lineWidth=Math.max(1,cw*0.13);
+      cx.beginPath(); cx.moveTo(x,Y(k[2])); cx.lineTo(x,Y(k[3])); cx.stroke();
+      const y1=Y(Math.max(k[1],k[4])), y2=Y(Math.min(k[1],k[4]));
+      cx.fillStyle=col; cx.fillRect(x-bw/2,y1,bw,Math.max(1.2,y2-y1));
+    });
+
+    lines.forEach(l=>{
+      if(l.p==null) return;
+      const y=Y(l.p);
+      cx.save(); cx.strokeStyle=l.c; cx.lineWidth=l.lw||2.2;
+      if(l.dash!==false) cx.setLineDash(l.dash||[7,4]);
+      cx.beginPath(); cx.moveTo(padL,y); cx.lineTo(w-padR,y); cx.stroke(); cx.restore();
+      if(l.t){ cx.fillStyle=l.c; cx.font='800 12px Manrope'; cx.textAlign='left';
+        cx.fillText(l.t+' '+fmt(l.p), padL+6, y-6); }
+    });
+
+    // ---- разметка фигуры (по Мёрфи) ----
+    if(marks){
+      const A='#3a2fff', N='#e0245e', F='#7c3aed', P='#0d8a4a';
+      const R=(yhi=>yhi)(0);
+      marks.hlines.forEach(h=>{
+        cx.save(); cx.strokeStyle=N; cx.lineWidth=2; cx.setLineDash([7,4]);
+        cx.beginPath(); cx.moveTo(X(h.i0),Y(h.p)); cx.lineTo(X(h.i1),Y(h.p)); cx.stroke(); cx.restore();
+        if(h.t){ cx.fillStyle=N; cx.font='800 11px Manrope'; cx.textAlign='left';
+          cx.fillText(h.t, X(h.i0)+4, Y(h.p)-6); }
+      });
+      marks.lines.forEach(l=>{
+        const col = l.c==='neck'?N : (l.c==='pole'?P : F);
+        cx.save(); cx.strokeStyle=col; cx.lineWidth=2.2;
+        if(l.c==='neck') cx.setLineDash([7,4]);
+        cx.beginPath(); cx.moveTo(X(l.i0),Y(l.p0)); cx.lineTo(X(l.i1),Y(l.p1)); cx.stroke(); cx.restore();
+        if(l.t){ cx.fillStyle=col; cx.font='800 10.5px Manrope'; cx.textAlign='right';
+          cx.fillText(l.t, X(l.i1)-4, Y(l.p1)-5); }
+      });
+      const el=(i,p,col)=>{ cx.save(); cx.strokeStyle=col; cx.lineWidth=2.2;
+        cx.beginPath(); cx.ellipse(X(i),Y(p), Math.max(5,cw*2.2), priceH*0.028, 0,0,7); cx.stroke(); cx.restore(); };
+      marks.points.forEach(x=>{
+        el(x.i,x.p,A);
+        const tx=X(x.i), ty=Y(x.p)-priceH*0.055;
+        cx.font='800 11px Manrope'; cx.textAlign='center';
+        const w2=cx.measureText(x.t).width/2+7;
+        cx.fillStyle='#ffffffee'; cx.strokeStyle=A; cx.lineWidth=1.2;
+        cx.beginPath(); cx.roundRect(tx-w2, ty-11, w2*2, 19, 6); cx.fill(); cx.stroke();
+        cx.fillStyle=A; cx.fillText(x.t, tx, ty+3);
+      });
+      if(marks.brk){
+        el(marks.brk.i, marks.brk.p, N);
+        cx.fillStyle=N; cx.font='800 11px Manrope'; cx.textAlign='center';
+        cx.fillText('ПРОБОЙ', X(marks.brk.i), Y(marks.brk.p)+priceH*0.075);
+      }
+    }
+
+    if(hasR){
+      const ry=padT+priceH+gap, rh=rsiH, RY=v=>ry+rh-v/100*rh;
+      cx.save(); cx.fillStyle='rgba(239,74,74,.07)'; cx.fillRect(padL,RY(100),w-padR-padL,RY(70)-RY(100));
+      cx.fillStyle='rgba(22,185,121,.07)'; cx.fillRect(padL,RY(30),w-padR-padL,RY(0)-RY(30)); cx.restore();
+      [[70,'#ef4a4a'],[50,'#a49bbd'],[30,'#16b979']].forEach(([lv,c])=>{
+        cx.save(); cx.strokeStyle=c; cx.setLineDash(lv===50?[2,3]:[5,4]); cx.lineWidth=1.2;
+        cx.beginPath(); cx.moveTo(padL,RY(lv)); cx.lineTo(w-padR,RY(lv)); cx.stroke(); cx.restore();
+        cx.fillStyle=c; cx.font='700 10.5px Manrope'; cx.fillText(lv, w-padR+7, RY(lv)+4);
+      });
+      const rs=rsi.concat(rsifuture.slice(0,revealed));
+      cx.strokeStyle='#7c3aed'; cx.lineWidth=1.9; cx.beginPath(); let st=false;
+      rs.forEach((v,i)=>{ if(v==null) return; const x=X(i), y=RY(v);
+        st? cx.lineTo(x,y) : (cx.moveTo(x,y), st=true); });
+      cx.stroke();
+      cx.save(); cx.strokeStyle='#c4b5fd'; cx.setLineDash([5,4]); cx.lineWidth=1.4;
+      cx.beginPath(); cx.moveTo(fx,ry); cx.lineTo(fx,ry+rh); cx.stroke(); cx.restore();
+      cx.fillStyle='#7c3aed'; cx.font='800 11.5px Manrope'; cx.fillText('RSI (14)', padL+5, ry+13);
+    }
+  };
+  return G;
+}
+
+// ==================== 1. РАЗМЕЧАЙ ГРАФИК ====================
+const MK = makeChart($('chart'));
+let mMode='all', mTask=null, mPool=[], mPick=null, mFc=null, mLvl=null,
+    mRev=0, mAnim=null, mChecked=false;
+
+const QQ = {
+  trend:  ['Какой сейчас тренд?','Смотри на максимумы и минимумы: они растут или падают?'],
+  level:  ['Кликни по графику там, где видишь рабочий уровень','На графике их несколько — засчитаем любой, от которого реально отбивались'],
+  pattern:['Какая фигура сформировалась?','Смотри только на то, что рядом с текущей ценой — старые отработанные фигуры не в счёт'],
+  rsi:    ['Что показывает RSI прямо сейчас?','Смотри на нижнюю панель: где линия относительно 70 и 30'],
+};
+
+/* Уровней на графике несколько. Старые задания хранят один (answer), новые — список (levels). */
+function taskLevels(t){
+  if(t.levels && t.levels.length) return t.levels;
+  if(t.answer!=null && typeof t.answer==='number')
+    return [{p:t.answer, touches:t.touches||3}];
+  return [];
+}
+/* Ученик попал в какой-то из уровней? Возвращаем именно тот, в который попал. */
+function hitLevel(t, price){
+  let best=null, bd=Infinity;
+  taskLevels(t).forEach(l=>{
+    const d=Math.abs(price-l.p);
+    if(d<=t.tol && d<bd){ bd=d; best=l; }
+  });
+  return best;
+}
+
+function mDraw(){
+  if(!mTask) return;
+  const lines=[]; const zones=[];
+  if(mTask.type==='level'){
+    const got = mChecked ? hitLevel(mTask, mLvl) : null;
+    // до проверки — только линия ученика; после — она нужна лишь если он промахнулся
+    if(mLvl!=null && (!mChecked || !got)) lines.push({p:mLvl,c:'#7c3aed',t:'твой уровень:'});
+    if(mChecked){
+      taskLevels(mTask).forEach(l=>{
+        const mine = got && Math.abs(l.p-got.p)<1e-9;
+        lines.push({p:l.p, c: mine?'#0d8a4a':'#8b86a8',
+          t: (mine?'✓ твой · ':'') + l.touches+' касаний:',
+          dash:false, lw: mine?2.6:1.6});
+        zones.push({a:l.p-mTask.tol, b:l.p+mTask.tol,
+          c: mine?'rgba(13,138,74,.15)':'rgba(139,134,168,.09)'});
+      });
+    }
+  }
+  MK.draw({setup:mTask.setup, future:mTask.future, revealed:mRev,
+    rsi:mTask.rsi||null, rsifuture:mTask.rsifuture||[], lines, zones,
+    marks: (mChecked && mTask.marks) ? mTask.marks : null});
+}
+addEventListener('resize',()=>{ mDraw(); sDraw(); cDraw(); });
+
+$('chart').addEventListener('click', e=>{
+  if(!mTask || mTask.type!=='level' || mChecked) return;
+  const r=e.target.getBoundingClientRect(), y=e.clientY-r.top;
+  if(y<MK.padT || y>MK.padT+MK.priceH) return;
+  mLvl=MK.invY(y); mDraw(); mRefresh();
+});
+
+function mBuild(){ mPool = shuffle(TASKS.filter(t=> mMode==='all'||t.type===mMode)); }
+function mLoad(){
+  if(!mPool.length) mBuild();
+  mTask=mPool.pop(); mPick=null; mFc=null; mLvl=null; mRev=0; mChecked=false;
+  if(mAnim) clearInterval(mAnim);
+  $('tTag').textContent=TYPES[mTask.type].tag;
+  $('tSym').textContent=mTask.sym;
+  $('tNum').textContent='задание #'+mTask.id;
+  $('tQ').textContent=QQ[mTask.type][0];
+  $('tHint').textContent=QQ[mTask.type][1];
+  const box=$('tOpts'); box.innerHTML='';
+  (mTask.options||[]).forEach(o=>{
+    const b=document.createElement('div'); b.className='opt'; b.textContent=o;
+    b.onclick=()=>{ if(mChecked)return; mPick=o;
+      [...box.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); mRefresh(); };
+    box.appendChild(b);
+  });
+  document.querySelectorAll('#appMark .fcb').forEach(b=>{
+    b.className='fcb '+b.dataset.d;
+    b.onclick=()=>{ if(mChecked)return; mFc=b.dataset.d;
+      document.querySelectorAll('#appMark .fcb').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel'); mRefresh(); };
+  });
+  $('tVerdict').className='verdict';
+  $('bCheck').classList.remove('hidden'); $('bNext').classList.add('hidden');
+  $('bSkip').classList.remove('hidden');
+  mRefresh(); mDraw();
+}
+function mRefresh(){
+  const need = mTask.type==='level' ? (mLvl!=null) : (mPick!=null);
+  $('bCheck').disabled = !(need && mFc);
+}
+function mCheck(){
+  mChecked=true;
+  const box=$('tOpts');
+  let ok, gotLevel=null;
+  if(mTask.type==='level'){
+    gotLevel = hitLevel(mTask, mLvl);
+    ok = !!gotLevel;                       // попал в ЛЮБОЙ рабочий уровень — верно
+  }
+  else {
+    ok = mPick===mTask.answer;
+    [...box.children].forEach(c=>{
+      c.classList.remove('sel');
+      if(c.textContent===mTask.answer) c.classList.add('right');
+      else if(c.textContent===mPick) c.classList.add('wrong');
+    });
+  }
+  const fcOk = mFc===mTask.fdir;
+  document.querySelectorAll('#appMark .fcb').forEach(b=>{
+    b.classList.remove('sel');
+    if(b.dataset.d===mTask.fdir) b.classList.add('right');
+    else if(b.dataset.d===mFc) b.classList.add('wrong');
+  });
+  let pts=(ok?10:0)+(fcOk?5:0);
+  if(ok){ ST.mark.streak++; ST.mark.right++; } else ST.mark.streak=0;
+  if(ST.mark.streak>=3) pts=Math.round(pts*1.5);
+  ST.mark.score+=pts; ST.mark.done++;
+  ST.mark.by[mTask.type].d++; if(ok) ST.mark.by[mTask.type].r++;
+  save(); paintStats(); mProg();
+
+  mRev=0;
+  mAnim=setInterval(()=>{ mRev++; mDraw();
+    if(mRev>=mTask.future.length){ clearInterval(mAnim); mAnim=null; } }, 26);
+
+  const v=$('tVerdict'); v.className='verdict show '+(ok?'good':'bad');
+  const lvls = mTask.type==='level' ? taskLevels(mTask) : [];
+  const lvlList = lvls.map(l=>fmt(l.p)+' ('+l.touches+' касаний)').join(' · ');
+  const your = mTask.type==='level'?fmt(mLvl):mPick;
+  const rightA= mTask.type==='level'?lvlList:mTask.answer;
+  v.innerHTML =
+    '<h4>'+(ok?'✅ Верно'+(ST.mark.streak>=3?' · серия ×1.5':''):'❌ Мимо')+' &nbsp;·&nbsp; +'+pts+' очков</h4>'+
+    (mTask.type==='level'
+      ? '<p>Твой уровень: <b>'+your+'</b>'+(ok?' — попал.':' — рядом уровня нет.')+'</p>'+
+        '<p>Рабочие уровни на этом графике: <b>'+lvlList+'</b></p>'
+      : '<p>Твой ответ: <b>'+your+'</b>'+(ok?'':' → правильный: <b>'+rightA+'</b>')+'</p>')+
+    '<p>Дальше цена пошла <b>'+(mTask.fdir==='up'?'вверх':'вниз')+'</b> (максимум '+mTask.fmove+'%) — '+
+      (fcOk?'прогноз совпал (+5)':'прогноз не совпал')+'.</p>'+
+    (mTask.type==='level'
+      ? '<p style="color:#6b6088">Уровень на графике не один. Засчитывается любой, от которого цена реально отбивалась — '+
+        'зелёным подсвечен твой, серым — остальные рабочие. Если промахнулся: смотри, где цена разворачивалась несколько раз.</p>'
+      : '')+
+    (mTask.marks?'<p style="color:#6b6088">Фигура размечена на графике. Она <b>действующая</b> — сформировалась у текущей цены, зайти ещё можно.</p>':'')+
+    (mTask.expect && mTask.expect!==mTask.fdir
+      ? '<div class="note"><b>⚠️ Фигура не отработала.</b> Ты определил её правильно, но цена пошла против. '+
+        'Так бывает — и это главное правило Урока 5: <b>паттерн это вероятность, а не гарантия.</b> Поэтому и нужен стоп.</div>'
+      : '');
+  $('bCheck').classList.add('hidden'); $('bSkip').classList.add('hidden');
+  $('bNext').classList.remove('hidden');
+}
+function mProg(){
+  const p=$('prog'); p.innerHTML='';
+  ['trend','level','pattern','rsi'].forEach(k=>{
+    const b=ST.mark.by[k], pct=b.d?Math.round(b.r/b.d*100):0;
+    const d=document.createElement('div'); d.className='pc';
+    d.innerHTML='<div class="t">'+TYPES[k].name+' · '+TYPES[k].tag+'</div>'+
+      '<div class="n">'+pct+'% <small>· '+b.r+' из '+b.d+'</small></div>'+
+      '<div class="pbar"><i style="width:'+pct+'%"></i></div>';
+    p.appendChild(d);
+  });
+}
+$('bCheck').onclick=mCheck; $('bNext').onclick=mLoad; $('bSkip').onclick=mLoad;
+
+const mbox=$('modes');
+Object.entries(TYPES).forEach(([k,v])=>{
+  const n = k==='all'?TASKS.length:TASKS.filter(t=>t.type===k).length;
+  const b=document.createElement('div');
+  b.className='mode'+(k===mMode?' on':'');
+  b.innerHTML=v.name+'<small>'+n+'</small>';
+  b.onclick=()=>{ mMode=k; [...mbox.children].forEach(c=>c.classList.remove('on'));
+    b.classList.add('on'); mBuild(); mLoad(); };
+  mbox.appendChild(b);
+});
+
+// ==================== 2. СИМУЛЯТОР СДЕЛКИ ====================
+const SM = makeChart($('simchart'));
+let sTask=null, sPool=[], sTool='entry', sPts={entry:null,stop:null,take:null},
+    sRev=0, sAnim=null, sRan=false;
+if(ST.sim.bal==null) ST.sim.bal = ST.sim.dep;
+
+function sDraw(){
+  if(!sTask) return;
+  const lines=[
+    {p:sPts.entry,c:'#3a2fff',t:'ВХОД'},
+    {p:sPts.stop, c:'#ef4a4a',t:'СТОП'},
+    {p:sPts.take, c:'#0d8a4a',t:'ЦЕЛЬ'},
+  ];
+  const zones=[];
+  if(sPts.entry!=null && sPts.stop!=null)
+    zones.push({a:sPts.entry,b:sPts.stop,c:'rgba(239,74,74,.10)'});
+  if(sPts.entry!=null && sPts.take!=null)
+    zones.push({a:sPts.entry,b:sPts.take,c:'rgba(13,138,74,.10)'});
+  SM.draw({setup:sTask.setup, future:sTask.future, revealed:sRev, lines, zones});
+}
+$('simchart').addEventListener('click', e=>{
+  if(!sTask || sRan) return;
+  const r=e.target.getBoundingClientRect(), y=e.clientY-r.top;
+  if(y<SM.padT || y>SM.padT+SM.priceH) return;
+  sPts[sTool]=SM.invY(y);
+  // авто-переход к следующему инструменту
+  const order=['entry','stop','take'];
+  const nxt=order.find(k=>sPts[k]==null);
+  if(nxt) sTool=nxt;
+  sTools(); sDraw(); sCalc();
+});
+function sTools(){
+  document.querySelectorAll('.tool').forEach(t=>{
+    t.classList.toggle('on', t.dataset.k===sTool);
+    t.classList.toggle('done', sPts[t.dataset.k]!=null);
+    t.onclick=()=>{ if(sRan)return; sTool=t.dataset.k; sTools(); };
+  });
+}
+function sSetup(){
+  const dep=+$('sDep').value||10000, riskPct=+$('sRisk').value||2;
+  ST.sim.dep=dep; ST.sim.risk=riskPct;
+  const {entry,stop,take}=sPts;
+  if(entry==null||stop==null||take==null) return null;
+  const long = take>entry && stop<entry;
+  const short= take<entry && stop>entry;
+  if(!long && !short) return {bad:true};
+  const riskPer = Math.abs(entry-stop);
+  const rewPer  = Math.abs(take-entry);
+  const rr = rewPer/riskPer;
+  const riskRub = dep*riskPct/100;
+  const qty = riskRub/riskPer;            // объём в монете
+  const posRub = qty*entry;               // размер позиции
+  return {long, riskPer, rewPer, rr, riskRub, qty, posRub, dep, riskPct};
+}
+function sCalc(){
+  const s=sSetup(); const box=$('sCalc'); box.innerHTML='';
+  if(!s){ $('sMsg').textContent='Поставь все три точки — вход, стоп и цель.';
+    $('sRun').disabled=true; return; }
+  if(s.bad){ $('sMsg').innerHTML='<b style="color:#c02626">Так сделку не собрать.</b> '+
+    'Для лонга: цель выше входа, стоп ниже. Для шорта — наоборот.';
+    $('sRun').disabled=true; return; }
+  const rrCls = s.rr>=2 ? 'good' : (s.rr>=1.5 ? '' : 'bad');
+  const cards=[
+    ['Направление', s.long?'▲ ЛОНГ':'▼ ШОРТ', s.long?'good':'bad'],
+    ['Риск на сделку', rub(s.riskRub)+' · '+s.riskPct+'%', 'warn'],
+    ['Риск / прибыль', '1 : '+s.rr.toFixed(2), rrCls],
+    ['Если цель', '+'+rub(s.riskRub*s.rr), 'good'],
+    ['Если стоп', '−'+rub(s.riskRub), 'bad'],
+    ['Объём позиции', rub(s.posRub), s.posRub > s.dep*1.02 ? 'bad' : ''],
+  ];
+  cards.forEach(([t,v,c])=>{
+    const d=document.createElement('div'); d.className='cc '+(c||'');
+    d.innerHTML='<div class="t">'+t+'</div><div class="v">'+v+'</div>';
+    box.appendChild(d);
+  });
+  let msg;
+  if(s.posRub > s.dep*1.02){
+    msg = '<b style="color:#c02626">Позиция больше депозита ('+rub(s.posRub)+' против '+rub(s.dep)+').</b> '+
+          'Стоп стоит слишком близко ко входу — чтобы рискнуть '+s.riskPct+'%, пришлось бы купить больше, чем у тебя есть. '+
+          'Отодвинь стоп дальше (за уровень, за фигуру) или снизь риск.';
+  } else if(s.rr<1.5){
+    msg = '<b style="color:#8a5a00">Слабое соотношение.</b> Ты рискуешь почти столько же, сколько хочешь заработать. Ищи R:R хотя бы 1:2.';
+  } else {
+    msg = 'Готово. Жми «Запустить сделку» — свечи доиграются, и увидим результат.';
+  }
+  $('sMsg').innerHTML = msg;
+  $('sRun').disabled=false;
+}
+$('sDep').oninput=sCalc; $('sRisk').oninput=sCalc;
+$('sClear').onclick=()=>{ if(sRan)return; sPts={entry:null,stop:null,take:null}; sTool='entry';
+  sTools(); sDraw(); sCalc(); };
+
+function sLoad(){
+  if(!sPool.length) sPool=shuffle(TASKS.slice());
+  sTask=sPool.pop();
+  sPts={entry:sTask.setup[sTask.setup.length-1][4], stop:null, take:null};
+  sTool='stop'; sRev=0; sRan=false;
+  if(sAnim) clearInterval(sAnim);
+  $('sSym').textContent=sTask.sym;
+  $('sNum').textContent='график #'+sTask.id;
+  $('sVerdict').className='verdict';
+  $('sRun').classList.remove('hidden'); $('sNext').classList.add('hidden');
+  $('sSkip').classList.remove('hidden');
+  $('sDep').value=ST.sim.dep; $('sRisk').value=ST.sim.risk;
+  sTools(); sDraw(); sCalc();
+}
+function sRun(){
+  const s=sSetup(); if(!s||s.bad) return;
+  sRan=true;
+  let hit=null, hitIdx=sTask.future.length-1;
+  for(let i=0;i<sTask.future.length;i++){
+    const k=sTask.future[i], hi=k[2], lo=k[3];
+    const stopHit = s.long ? lo<=sPts.stop : hi>=sPts.stop;
+    const takeHit = s.long ? hi>=sPts.take : lo<=sPts.take;
+    if(stopHit){ hit='stop'; hitIdx=i; break; }   // если обе в одной свече — считаем стоп (честно, худший случай)
+    if(takeHit){ hit='take'; hitIdx=i; break; }
+  }
+  let pnl, rMult, why;
+  if(hit==='take'){ pnl=s.riskRub*s.rr; rMult=s.rr;  why='Цель достигнута'; }
+  else if(hit==='stop'){ pnl=-s.riskRub; rMult=-1;   why='Сработал стоп'; }
+  else {
+    const last=sTask.future[sTask.future.length-1][4];
+    const move = s.long ? (last-sPts.entry) : (sPts.entry-last);
+    rMult = move/s.riskPer; pnl = s.riskRub*rMult;
+    why='Ни стоп, ни цель не задело — закрыли по рынку в конце';
+  }
+  ST.sim.bal += pnl;
+  ST.sim.trades.push({sym:sTask.sym, r:+rMult.toFixed(2), pnl:Math.round(pnl),
+                      rr:+s.rr.toFixed(2), hit:hit||'market', bal:Math.round(ST.sim.bal)});
+  save(); paintStats(); sJournal();
+
+  sRev=0;
+  sAnim=setInterval(()=>{ sRev++; sDraw();
+    if(sRev>=hitIdx+2 || sRev>=sTask.future.length){ clearInterval(sAnim); sAnim=null; } }, 30);
+
+  const good = pnl>0;
+  const v=$('sVerdict'); v.className='verdict show '+(good?'good':'bad');
+  v.innerHTML =
+    '<h4>'+(good?'✅ ':'❌ ')+why+' &nbsp;·&nbsp; '+(pnl>0?'+':'')+rub(pnl)+'</h4>'+
+    '<p>Результат: <b>'+(rMult>0?'+':'')+rMult.toFixed(2)+'R</b> · депозит теперь <b>'+rub(ST.sim.bal)+'</b></p>'+
+    (hit==='stop' && s.rr>=2
+      ? '<div class="note">Стоп — это <b>нормально</b>. Ты рискнул '+s.riskPct+'% и потерял ровно их. '+
+        'При R:R 1:'+s.rr.toFixed(1)+' достаточно выигрывать 1 сделку из 3, чтобы быть в плюсе.</div>':'')+
+    (s.rr<1.5
+      ? '<div class="note"><b>Разбор:</b> у тебя было R:R 1:'+s.rr.toFixed(2)+'. При таком соотношении '+
+        'нужно угадывать больше 2 из 3 сделок — почти никто так не умеет. <b>Ставь цель дальше стопа.</b></div>':'');
+  $('sRun').classList.add('hidden'); $('sSkip').classList.add('hidden');
+  $('sNext').classList.remove('hidden');
+}
+$('sRun').onclick=sRun; $('sNext').onclick=sLoad; $('sSkip').onclick=sLoad;
+
+function sJournal(){
+  const tr=ST.sim.trades, box=$('sJournal'); box.innerHTML='';
+  const st=$('sStats'); st.innerHTML='';
+  const n=tr.length, wins=tr.filter(t=>t.r>0).length;
+  const wr = n?Math.round(wins/n*100):0;
+  const avgR = n? (tr.reduce((a,t)=>a+t.r,0)/n) : 0;
+  const totR = tr.reduce((a,t)=>a+t.r,0);
+  let peak=ST.sim.dep, dd=0, bal=ST.sim.dep;
+  tr.forEach(t=>{ bal=t.bal; peak=Math.max(peak,bal); dd=Math.max(dd,(peak-bal)/peak*100); });
+  const pnl = ST.sim.bal - ST.sim.dep;
+  [['Депозит', rub(ST.sim.bal), pnl>=0?'good':'bad'],
+   ['Сделок', n+' · винрейт '+wr+'%',''],
+   ['Средний R', (avgR>=0?'+':'')+avgR.toFixed(2)+'R', avgR>=0?'good':'bad'],
+   ['Макс. просадка', dd.toFixed(1)+'%', dd>20?'bad':''],
+  ].forEach(([t,v,c])=>{
+    const d=document.createElement('div'); d.className='pc';
+    d.innerHTML='<div class="t">'+t+'</div><div class="n" style="color:'+
+      (c==='good'?'#0d8a4a':c==='bad'?'#c02626':'#4c1d95')+'">'+v+'</div>';
+    st.appendChild(d);
+  });
+  // кривая депозита
+  const cv=$('eq'), cx=cv.getContext('2d');
+  const w=cv.parentElement.clientWidth, h=70, dpr=devicePixelRatio||1;
+  cv.width=w*dpr; cv.height=h*dpr; cv.style.width=w+'px'; cv.style.height=h+'px';
+  cx.setTransform(dpr,0,0,dpr,0,0); cx.clearRect(0,0,w,h);
+  const pts=[ST.sim.dep].concat(tr.map(t=>t.bal));
+  if(pts.length>1){
+    const lo=Math.min(...pts), hi=Math.max(...pts), rg=(hi-lo)||1;
+    cx.strokeStyle=ST.sim.bal>=ST.sim.dep?'#16b979':'#ef4a4a'; cx.lineWidth=2;
+    cx.beginPath();
+    pts.forEach((p,i)=>{ const x=i/(pts.length-1)*(w-4)+2, y=h-6-(p-lo)/rg*(h-14);
+      i?cx.lineTo(x,y):cx.moveTo(x,y); });
+    cx.stroke();
+    cx.save(); cx.setLineDash([3,3]); cx.strokeStyle='#c4b5fd'; cx.lineWidth=1;
+    const y0=h-6-(ST.sim.dep-lo)/rg*(h-14);
+    cx.beginPath(); cx.moveTo(0,y0); cx.lineTo(w,y0); cx.stroke(); cx.restore();
+  }
+  tr.slice(-8).reverse().forEach(t=>{
+    const d=document.createElement('div'); d.className='jrow';
+    const lab = t.hit==='take'?'цель':t.hit==='stop'?'стоп':'по рынку';
+    d.innerHTML='<span class="s">'+t.sym+'</span><span style="color:#6b6088">'+lab+
+      ' · R:R 1:'+t.rr+'</span><span class="r '+(t.r>0?'p':'m')+'">'+
+      (t.r>0?'+':'')+t.r+'R &nbsp; '+(t.pnl>0?'+':'')+rub(t.pnl)+'</span>';
+    box.appendChild(d);
+  });
+  if(!n) box.innerHTML='<div class="jrow" style="color:#a49bbd;border:none">Пока пусто. Собери первую сделку.</div>';
+}
+
+// ==================== 3. КАРТОЧКИ ====================
+const CD = makeChart($('cchart'));
+const PATT = TASKS.filter(t=>t.type==='pattern');
+const LIMIT = 12; // секунд
+let cQueue=[], cTask=null, cT=null, cLeft=LIMIT, cDone=false;
+
+function cDraw(){ if(cTask) CD.draw({setup:cTask.setup, future:[], revealed:0,
+    marks: (cDone && cTask.marks) ? cTask.marks : null}); }
+function cBuild(){
+  // сначала невыученные, потом те, где ошибался
+  const fresh=PATT.filter(t=>!ST.cards.seen[t.id]);
+  const again=PATT.filter(t=>ST.cards.seen[t.id]==='bad');
+  cQueue = shuffle(fresh).concat(shuffle(again));
+  if(!cQueue.length) cQueue = shuffle(PATT.slice());
+}
+function cLoad(){
+  if(!cQueue.length) cBuild();
+  cTask=cQueue.shift(); cDone=false; cLeft=LIMIT;
+  $('cSym').textContent=cTask.sym;
+  $('cVerdict').className='verdict';
+  $('cNext').classList.add('hidden');
+  $('cBar').classList.remove('hot');
+  const box=$('cOpts'); box.innerHTML='';
+  cTask.options.forEach(o=>{
+    const b=document.createElement('div'); b.className='opt'; b.textContent=o;
+    b.onclick=()=>cAnswer(o,b);
+    box.appendChild(b);
+  });
+  cInfo(); cDraw(); cTick(true);
+}
+function cTick(start){
+  if(cT) clearInterval(cT);
+  const t0=Date.now();
+  const upd=()=>{
+    cLeft = LIMIT - (Date.now()-t0)/1000;
+    const pct=Math.max(0,cLeft/LIMIT*100);
+    $('cBar').firstElementChild.style.width=pct+'%';
+    $('cBar').classList.toggle('hot', cLeft<4);
+    $('cTime').textContent = cLeft>0 ? Math.ceil(cLeft)+' сек' : 'время вышло';
+    if(cLeft<=0){ clearInterval(cT); cT=null; if(!cDone) cAnswer(null,null); }
+  };
+  if(start) upd();
+  cT=setInterval(upd,90);
+}
+function cAnswer(pick, el){
+  if(cDone) return;
+  cDone=true; if(cT){clearInterval(cT); cT=null;}
+  const ok = pick===cTask.answer;
+  [...$('cOpts').children].forEach(c=>{
+    if(c.textContent===cTask.answer) c.classList.add('right');
+    else if(c.textContent===pick) c.classList.add('wrong');
+  });
+  const wasNew = !ST.cards.seen[cTask.id];
+  if(ok){ if(wasNew || ST.cards.seen[cTask.id]==='bad') ST.cards.seen[cTask.id]='ok'; ST.cards.right++; }
+  else { ST.cards.seen[cTask.id]='bad'; cQueue.splice(Math.min(3,cQueue.length),0,cTask); }
+  ST.cards.done++;
+  save(); paintStats(); cInfo(); cProg(); cDraw();
+  const v=$('cVerdict'); v.className='verdict show '+(ok?'good':'bad');
+  v.innerHTML = ok
+    ? '<h4>✅ '+cTask.answer+'</h4><p>Засчитано в насмотренность.</p>'
+    : '<h4>❌ Это '+cTask.answer+'</h4><p>'+(pick?('Ты выбрал: <b>'+pick+'</b>. '):'Время вышло. ')+
+      'Карточка вернётся через пару графиков — пока не запомнишь.</p>';
+  $('cNext').classList.remove('hidden');
+}
+function cInfo(){
+  const learned=Object.values(ST.cards.seen).filter(v=>v==='ok').length;
+  const acc = ST.cards.done?Math.round(ST.cards.right/ST.cards.done*100):0;
+  $('cInfo').innerHTML='Насмотренность: <b>'+learned+' / '+PATT.length+'</b> фигур'+
+    ' &nbsp;·&nbsp; точность <b>'+acc+'%</b>'+
+    ' &nbsp;·&nbsp; в очереди на повтор: <b>'+
+      Object.values(ST.cards.seen).filter(v=>v==='bad').length+'</b>';
+}
+function cProg(){
+  const learned=Object.values(ST.cards.seen).filter(v=>v==='ok').length;
+  const pct=Math.round(learned/PATT.length*100);
+  $('cProg').innerHTML='<div class="pc"><div class="t">Насмотренность</div>'+
+    '<div class="n">'+pct+'% <small>· '+learned+' из '+PATT.length+' фигур</small></div>'+
+    '<div class="pbar"><i style="width:'+pct+'%"></i></div></div>';
+}
+$('cNext').onclick=cLoad;
+
+// ==================== вкладки и общая шапка ====================
+const APPS=[
+  {k:'mark', n:'Размечай график', s:'уроки 3–6 · автопроверка'},
+  {k:'sim',  n:'Симулятор сделки', s:'вход · стоп · цель · риск'},
+  {k:'cards',n:'Карточки', s:'насмотренность на скорость'},
+];
+let app='mark';
+const abox=$('apps');
+APPS.forEach(a=>{
+  const d=document.createElement('div');
+  d.className='app'+(a.k===app?' on':'');
+  d.innerHTML=a.n+'<em>'+a.s+'</em>';
+  d.onclick=()=>{
+    app=a.k; [...abox.children].forEach(c=>c.classList.remove('on')); d.classList.add('on');
+    $('appMark').classList.toggle('hidden', app!=='mark');
+    $('appSim').classList.toggle('hidden',  app!=='sim');
+    $('appCards').classList.toggle('hidden',app!=='cards');
+    if(app==='sim'  && !sTask) sLoad();
+    if(app==='cards'&& !cTask) cLoad();
+    if(app==='sim')  { sJournal(); sDraw(); }
+    if(app==='cards'){ cDraw(); cProg(); }
+    if(app==='mark') mDraw();
+    paintStats();
+  };
+  abox.appendChild(d);
+});
+
+function paintStats(){
+  const s=$('stats');
+  if(app==='mark'){
+    const m=ST.mark, acc=m.done?Math.round(m.right/m.done*100)+'%':'—';
+    s.innerHTML =
+      '<div class="stat"><b>'+m.score+'</b><i>очки</i></div>'+
+      '<div class="stat fire"><b>'+m.streak+'</b><i>серия</i></div>'+
+      '<div class="stat"><b>'+acc+'</b><i>точность</i></div>'+
+      '<div class="stat"><b>'+m.done+'</b><i>решено</i></div>';
+  } else if(app==='sim'){
+    const t=ST.sim.trades, n=t.length, wins=t.filter(x=>x.r>0).length;
+    const pnl=ST.sim.bal-ST.sim.dep;
+    s.innerHTML =
+      '<div class="stat '+(pnl>=0?'pos':'neg')+'"><b>'+rub(ST.sim.bal)+'</b><i>депозит</i></div>'+
+      '<div class="stat '+(pnl>=0?'pos':'neg')+'"><b>'+(pnl>0?'+':'')+rub(pnl)+'</b><i>итог</i></div>'+
+      '<div class="stat"><b>'+(n?Math.round(wins/n*100):0)+'%</b><i>винрейт</i></div>'+
+      '<div class="stat"><b>'+n+'</b><i>сделок</i></div>';
+  } else {
+    const learned=Object.values(ST.cards.seen).filter(v=>v==='ok').length;
+    const acc=ST.cards.done?Math.round(ST.cards.right/ST.cards.done*100)+'%':'—';
+    s.innerHTML =
+      '<div class="stat"><b>'+learned+'/'+PATT.length+'</b><i>фигур</i></div>'+
+      '<div class="stat"><b>'+acc+'</b><i>точность</i></div>'+
+      '<div class="stat"><b>'+ST.cards.done+'</b><i>карточек</i></div>';
+  }
+}
+
+function resetAll(){
+  if(!confirm('Сбросить прогресс по разметке?')) return;
+  ST.mark=JSON.parse(JSON.stringify(DEF.mark)); save(); paintStats(); mProg();
+}
+function resetSim(){
+  if(!confirm('Очистить дневник сделок и вернуть депозит?')) return;
+  ST.sim=JSON.parse(JSON.stringify(DEF.sim)); ST.sim.bal=ST.sim.dep;
+  save(); paintStats(); sJournal();
+}
+function resetCards(){
+  if(!confirm('Сбросить насмотренность?')) return;
+  ST.cards=JSON.parse(JSON.stringify(DEF.cards)); save(); paintStats(); cInfo(); cProg(); cBuild(); cLoad();
+}
+
+// старт
+mBuild(); mLoad(); mProg(); cBuild(); paintStats();
+</script></body></html>
