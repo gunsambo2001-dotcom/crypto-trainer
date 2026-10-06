@@ -5,18 +5,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#1e1035; --muted:#6b6088; --e900:#2e1065; --e700:#4c1d95; --e600:#6d28d9;
-  --e500:#7c3aed; --g400:#a78bfa; --g300:#c4b5fd; --mint:#f3efff; --line:#e6ddfb;
-  --ok:#0d8a4a; --okbg:#e8f8ef; --bad:#c02626; --badbg:#fdeaea;
-  --warn:#8a5a00; --warnbg:#fff5e0;
-  --up:#16b979; --down:#ef4a4a;
-  --sh:0 12px 30px -14px rgba(46,16,101,.35);
+  --ink:#e8eef4; --muted:#93a3b3; --e900:#0b0f14; --e700:#00d395; --e600:#00d395;
+  --e500:#00e8a6; --g400:#00a878; --g300:#7ee6c4; --mint:rgba(0,211,149,.12); --line:#26313d;
+  --ok:#00d395; --okbg:rgba(0,211,149,.12); --bad:#ff5c5c; --badbg:rgba(255,92,92,.12);
+  --warn:#ffb020; --warnbg:rgba(255,176,32,.12);
+  --up:#00d395; --down:#ff5c5c;
+  --bg:#0b0f14; --card:#151d26; --card2:#1a232e; --tx3:#63727f;
+  --sh:0 12px 30px -14px rgba(0,0,0,.6);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Manrope,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  background:#f5f4fb;color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:60px}
+  background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:60px}
 
-header{background:linear-gradient(135deg,var(--e900),var(--e700));color:#fff;padding:18px 24px 0}
+header{background:linear-gradient(150deg,#0b0f14,#0f1d1a 70%,#0d2a22);border-bottom:1px solid var(--line);color:#fff;padding:18px 24px 0}
 .hwrap{max-width:1180px;margin:0 auto}
 .htop{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .brand{font-size:21px;font-weight:800;letter-spacing:-.01em}
@@ -24,43 +25,43 @@ header{background:linear-gradient(135deg,var(--e900),var(--e700));color:#fff;pad
 .stats{margin-left:auto;display:flex;gap:9px;flex-wrap:wrap}
 .stat{background:#ffffff17;border:1px solid #ffffff2b;border-radius:12px;padding:7px 13px;min-width:74px;text-align:center}
 .stat b{display:block;font-size:18px;font-weight:800;line-height:1.2}
-.stat i{font-style:normal;font-size:10.5px;color:#d0c4f7;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
-.stat.fire b{color:#ffd98a}
-.stat.pos b{color:#7ee6b0} .stat.neg b{color:#ffa3a3}
+.stat i{font-style:normal;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.stat.fire b{color:#ffb020}
+.stat.pos b{color:#00d395} .stat.neg b{color:#ff5c5c}
 
 /* верхние вкладки-приложения */
 .apps{display:flex;gap:6px;margin-top:16px;flex-wrap:wrap}
-.app{background:#ffffff12;border:1px solid #ffffff20;border-bottom:none;color:#d8ccfb;
+.app{background:#ffffff12;border:1px solid #ffffff20;border-bottom:none;color:var(--muted);
   border-radius:12px 12px 0 0;padding:12px 20px;font-weight:800;font-size:15px;cursor:pointer;transition:.15s}
 .app:hover{background:#ffffff22}
-.app.on{background:#f5f4fb;color:var(--e700);border-color:transparent}
+.app.on{background:var(--bg);color:var(--e700);border-color:transparent}
 .app em{font-style:normal;opacity:.6;font-weight:700;font-size:12.5px;display:block;margin-top:1px}
 .app.on em{opacity:.65;color:var(--muted)}
 
 .modes{max-width:1180px;margin:18px auto 0;padding:0 24px;display:flex;gap:9px;flex-wrap:wrap}
-.mode{background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:9px 16px;font-weight:700;
+.mode{background:var(--card);border:1.5px solid var(--line);border-radius:11px;padding:9px 16px;font-weight:700;
   font-size:14.5px;color:var(--muted);cursor:pointer;transition:.15s;user-select:none}
 .mode:hover{border-color:var(--g400)}
-.mode.on{background:var(--e600);border-color:var(--e600);color:#fff;box-shadow:var(--sh)}
+.mode.on{background:var(--e600);border-color:var(--e600);color:#04130d;box-shadow:var(--sh)}
 .mode small{opacity:.7;font-weight:600;margin-left:5px}
 
 main{max-width:1180px;margin:18px auto;padding:0 24px}
-.card{background:#fff;border-radius:20px;box-shadow:var(--sh);overflow:hidden;margin-bottom:18px}
-.cardtop{padding:16px 24px;border-bottom:1px solid #f0edf9;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--sh);overflow:hidden;margin-bottom:18px}
+.cardtop{padding:16px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .tag{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--e600);
   background:var(--mint);padding:5px 11px;border-radius:20px}
 .sym{font-size:15px;font-weight:700;color:var(--muted)}
-.qnum{margin-left:auto;font-size:13px;font-weight:700;color:#a49bbd}
+.qnum{margin-left:auto;font-size:13px;font-weight:700;color:var(--tx3)}
 .q{padding:16px 24px 6px;font-size:21px;font-weight:800;letter-spacing:-.01em}
 .hint{padding:0 24px 12px;font-size:14px;color:var(--muted);font-weight:600}
-canvas{width:100%;display:block;background:#fff;cursor:crosshair;touch-action:none}
-.chartwrap{position:relative;margin:0 12px;border:1px solid #f0edf9;border-radius:14px;overflow:hidden}
+canvas{width:100%;display:block;background:var(--card);cursor:crosshair;touch-action:none}
+.chartwrap{position:relative;margin:0 12px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
 
 .answers{padding:16px 24px 6px;display:flex;gap:10px;flex-wrap:wrap}
-.opt{flex:1;min-width:150px;background:#fff;border:1.8px solid var(--line);border-radius:13px;padding:14px 16px;
+.opt{flex:1;min-width:150px;background:var(--card2);border:1.8px solid var(--line);border-radius:13px;padding:14px 16px;
   font-weight:700;font-size:15.5px;cursor:pointer;transition:.13s;text-align:center;color:var(--ink)}
-.opt:hover{border-color:var(--g400);background:#faf8ff}
-.opt.sel{border-color:var(--e600);background:var(--mint);color:var(--e700)}
+.opt:hover{border-color:var(--g400);background:var(--card2)}
+.opt.sel{border-color:var(--e600);background:var(--mint);color:var(--e600)}
 .opt.right{border-color:var(--ok);background:var(--okbg);color:var(--ok)}
 .opt.wrong{border-color:var(--bad);background:var(--badbg);color:var(--bad)}
 
@@ -68,20 +69,20 @@ canvas{width:100%;display:block;background:#fff;cursor:crosshair;touch-action:no
 .fc .lab{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
 .fcbtns{display:flex;gap:10px}
 .fcb{flex:1;border:1.8px solid var(--line);border-radius:13px;padding:13px;font-weight:800;font-size:15.5px;
-  cursor:pointer;background:#fff;transition:.13s}
+  cursor:pointer;background:var(--card2);transition:.13s}
 .fcb.up{color:var(--up)} .fcb.down{color:var(--down)}
 .fcb:hover{border-color:var(--g400)}
-.fcb.sel{border-width:2.4px;background:#faf8ff}
+.fcb.sel{border-width:2.4px;background:var(--card2)}
 .fcb.right{border-color:var(--ok);background:var(--okbg)}
 .fcb.wrong{border-color:var(--bad);background:var(--badbg)}
 
 .bar{padding:18px 24px 22px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.btn{background:var(--e600);color:#fff;border:none;border-radius:13px;padding:14px 26px;font-weight:800;
+.btn{background:var(--e600);color:#04130d;border:none;border-radius:13px;padding:14px 26px;font-weight:800;
   font-size:15.5px;cursor:pointer;font-family:inherit;transition:.15s;box-shadow:var(--sh)}
 .btn:hover{background:var(--e500)}
-.btn[disabled]{background:#d9d2ee;box-shadow:none;cursor:not-allowed}
-.btn.ghost{background:#fff;color:var(--e700);border:1.8px solid var(--line);box-shadow:none}
-.btn.ghost:hover{border-color:var(--g400);background:#faf8ff}
+.btn[disabled]{background:var(--line);color:var(--tx3);box-shadow:none;cursor:not-allowed}
+.btn.ghost{background:var(--card2);color:var(--ink);border:1.8px solid var(--line);box-shadow:none}
+.btn.ghost:hover{border-color:var(--g400);background:var(--card2)}
 
 .verdict{margin:0 24px 22px;border-radius:15px;padding:18px 22px;display:none}
 .verdict.show{display:block}
@@ -89,26 +90,26 @@ canvas{width:100%;display:block;background:#fff;cursor:crosshair;touch-action:no
 .verdict.bad{background:var(--badbg);border-left:4px solid var(--bad)}
 .verdict h4{font-size:18px;font-weight:800;margin-bottom:7px}
 .verdict.good h4{color:var(--ok)} .verdict.bad h4{color:var(--bad)}
-.verdict p{font-size:15px;line-height:1.5;font-weight:600;color:#3a2e55}
+.verdict p{font-size:15px;line-height:1.5;font-weight:600;color:#cfd9e2}
 .verdict p+p{margin-top:6px}
 .verdict b{color:var(--e700)}
 .note{margin-top:10px;padding:11px 13px;background:var(--warnbg);border-radius:9px;color:var(--warn);font-size:14.5px;line-height:1.5}
 
 .prog{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
-.pc{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:var(--sh)}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--sh)}
 .pc .t{font-size:12.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
 .pc .n{font-size:22px;font-weight:800;color:var(--e700)}
-.pc .n small{font-size:13.5px;color:#a49bbd;font-weight:700}
-.pbar{height:7px;background:#eee9f8;border-radius:6px;margin-top:9px;overflow:hidden}
+.pc .n small{font-size:13.5px;color:var(--tx3);font-weight:700}
+.pbar{height:7px;background:var(--line);border-radius:6px;margin-top:9px;overflow:hidden}
 .pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--e500),var(--g400));border-radius:6px;transition:.4s}
 .reset{text-align:right}
-.reset button{background:none;border:none;color:#a49bbd;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:underline}
+.reset button{background:none;border:none;color:var(--tx3);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:underline}
 
 /* ---------- КАРТОЧКИ ---------- */
-.timerbar{height:6px;background:#eee9f8;overflow:hidden}
+.timerbar{height:6px;background:var(--line);overflow:hidden}
 .timerbar i{display:block;height:100%;background:linear-gradient(90deg,var(--e500),var(--g400));width:100%;
   transition:width .1s linear}
-.timerbar.hot i{background:linear-gradient(90deg,#ef4a4a,#ffb199)}
+.timerbar.hot i{background:linear-gradient(90deg,#ff5c5c,#ffb199)}
 .cardsbig{padding:8px 24px 0;font-size:14px;font-weight:700;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
 .cardsbig b{color:var(--e700)}
 
@@ -247,8 +248,8 @@ function makeChart(canvas){
       invY: y => YLO + (padT+priceH-y)/priceH*(YHI-YLO)});
 
     cx.clearRect(0,0,w,h);
-    cx.strokeStyle='#f1eefa'; cx.lineWidth=1;
-    cx.font='11px Manrope, sans-serif'; cx.fillStyle='#a49bbd'; cx.textAlign='left';
+    cx.strokeStyle='#1f2a35'; cx.lineWidth=1;
+    cx.font='11px Manrope, sans-serif'; cx.fillStyle='#63727f'; cx.textAlign='left';
     for(let i=0;i<=5;i++){
       const p=YLO+(YHI-YLO)*i/5, y=Y(p);
       cx.beginPath(); cx.moveTo(padL,y); cx.lineTo(w-padR,y); cx.stroke();
@@ -261,14 +262,14 @@ function makeChart(canvas){
       cx.fillRect(padL, Math.min(y1,y2), w-padR-padL, Math.abs(y2-y1)); cx.restore();
     });
     const fx = padL + setup.length*cw;
-    if(revealed>0){ cx.save(); cx.fillStyle='rgba(124,58,237,.045)';
+    if(revealed>0){ cx.save(); cx.fillStyle='rgba(0,211,149,.05)';
       cx.fillRect(fx,padT,w-padR-fx,priceH); cx.restore(); }
-    cx.save(); cx.strokeStyle='#c4b5fd'; cx.setLineDash([5,4]); cx.lineWidth=1.6;
+    cx.save(); cx.strokeStyle='#3b5a50'; cx.setLineDash([5,4]); cx.lineWidth=1.6;
     cx.beginPath(); cx.moveTo(fx,padT); cx.lineTo(fx,padT+priceH); cx.stroke(); cx.restore();
 
     const bw=Math.max(1.4, cw*0.66);
     shown.forEach((k,i)=>{
-      const up=k[4]>=k[1], col=up?'#16b979':'#ef4a4a', x=X(i);
+      const up=k[4]>=k[1], col=up?'#00d395':'#ff5c5c', x=X(i);
       cx.strokeStyle=col; cx.lineWidth=Math.max(1,cw*0.13);
       cx.beginPath(); cx.moveTo(x,Y(k[2])); cx.lineTo(x,Y(k[3])); cx.stroke();
       const y1=Y(Math.max(k[1],k[4])), y2=Y(Math.min(k[1],k[4]));
@@ -287,7 +288,7 @@ function makeChart(canvas){
 
     // ---- разметка фигуры (по Мёрфи) ----
     if(marks){
-      const A='#3a2fff', N='#e0245e', F='#7c3aed', P='#0d8a4a';
+      const A='#4a9eff', N='#ff6b8e', F='#b794ff', P='#00d395';
       const R=(yhi=>yhi)(0);
       marks.hlines.forEach(h=>{
         cx.save(); cx.strokeStyle=N; cx.lineWidth=2; cx.setLineDash([7,4]);
@@ -310,7 +311,7 @@ function makeChart(canvas){
         const tx=X(x.i), ty=Y(x.p)-priceH*0.055;
         cx.font='800 11px Manrope'; cx.textAlign='center';
         const w2=cx.measureText(x.t).width/2+7;
-        cx.fillStyle='#ffffffee'; cx.strokeStyle=A; cx.lineWidth=1.2;
+        cx.fillStyle='#0b0f14ee'; cx.strokeStyle=A; cx.lineWidth=1.2;
         cx.beginPath(); cx.roundRect(tx-w2, ty-11, w2*2, 19, 6); cx.fill(); cx.stroke();
         cx.fillStyle=A; cx.fillText(x.t, tx, ty+3);
       });
@@ -323,21 +324,21 @@ function makeChart(canvas){
 
     if(hasR){
       const ry=padT+priceH+gap, rh=rsiH, RY=v=>ry+rh-v/100*rh;
-      cx.save(); cx.fillStyle='rgba(239,74,74,.07)'; cx.fillRect(padL,RY(100),w-padR-padL,RY(70)-RY(100));
-      cx.fillStyle='rgba(22,185,121,.07)'; cx.fillRect(padL,RY(30),w-padR-padL,RY(0)-RY(30)); cx.restore();
-      [[70,'#ef4a4a'],[50,'#a49bbd'],[30,'#16b979']].forEach(([lv,c])=>{
+      cx.save(); cx.fillStyle='rgba(255,92,92,.08)'; cx.fillRect(padL,RY(100),w-padR-padL,RY(70)-RY(100));
+      cx.fillStyle='rgba(0,211,149,.08)'; cx.fillRect(padL,RY(30),w-padR-padL,RY(0)-RY(30)); cx.restore();
+      [[70,'#ff5c5c'],[50,'#63727f'],[30,'#00d395']].forEach(([lv,c])=>{
         cx.save(); cx.strokeStyle=c; cx.setLineDash(lv===50?[2,3]:[5,4]); cx.lineWidth=1.2;
         cx.beginPath(); cx.moveTo(padL,RY(lv)); cx.lineTo(w-padR,RY(lv)); cx.stroke(); cx.restore();
         cx.fillStyle=c; cx.font='700 10.5px Manrope'; cx.fillText(lv, w-padR+7, RY(lv)+4);
       });
       const rs=rsi.concat(rsifuture.slice(0,revealed));
-      cx.strokeStyle='#7c3aed'; cx.lineWidth=1.9; cx.beginPath(); let st=false;
+      cx.strokeStyle='#4a9eff'; cx.lineWidth=1.9; cx.beginPath(); let st=false;
       rs.forEach((v,i)=>{ if(v==null) return; const x=X(i), y=RY(v);
         st? cx.lineTo(x,y) : (cx.moveTo(x,y), st=true); });
       cx.stroke();
-      cx.save(); cx.strokeStyle='#c4b5fd'; cx.setLineDash([5,4]); cx.lineWidth=1.4;
+      cx.save(); cx.strokeStyle='#3b5a50'; cx.setLineDash([5,4]); cx.lineWidth=1.4;
       cx.beginPath(); cx.moveTo(fx,ry); cx.lineTo(fx,ry+rh); cx.stroke(); cx.restore();
-      cx.fillStyle='#7c3aed'; cx.font='800 11.5px Manrope'; cx.fillText('RSI (14)', padL+5, ry+13);
+      cx.fillStyle='#4a9eff'; cx.font='800 11.5px Manrope'; cx.fillText('RSI (14)', padL+5, ry+13);
     }
   };
   return G;
@@ -378,15 +379,15 @@ function mDraw(){
   if(mTask.type==='level'){
     const got = mChecked ? hitLevel(mTask, mLvl) : null;
     // до проверки — только линия ученика; после — она нужна лишь если он промахнулся
-    if(mLvl!=null && (!mChecked || !got)) lines.push({p:mLvl,c:'#7c3aed',t:'твой уровень:'});
+    if(mLvl!=null && (!mChecked || !got)) lines.push({p:mLvl,c:'#4a9eff',t:'твой уровень:'});
     if(mChecked){
       taskLevels(mTask).forEach(l=>{
         const mine = got && Math.abs(l.p-got.p)<1e-9;
-        lines.push({p:l.p, c: mine?'#0d8a4a':'#8b86a8',
+        lines.push({p:l.p, c: mine?'#00d395':'#93a3b3',
           t: (mine?'✓ твой · ':'') + l.touches+' касаний:',
           dash:false, lw: mine?2.6:1.6});
         zones.push({a:l.p-mTask.tol, b:l.p+mTask.tol,
-          c: mine?'rgba(13,138,74,.15)':'rgba(139,134,168,.09)'});
+          c: mine?'rgba(0,211,149,.15)':'rgba(147,163,179,.09)'});
       });
     }
   }
@@ -482,10 +483,10 @@ function mCheck(){
     '<p>Дальше цена пошла <b>'+(mTask.fdir==='up'?'вверх':'вниз')+'</b> (максимум '+mTask.fmove+'%) — '+
       (fcOk?'прогноз совпал (+5)':'прогноз не совпал')+'.</p>'+
     (mTask.type==='level'
-      ? '<p style="color:#6b6088">Уровень на графике не один. Засчитывается любой, от которого цена реально отбивалась — '+
+      ? '<p style="color:#93a3b3">Уровень на графике не один. Засчитывается любой, от которого цена реально отбивалась — '+
         'зелёным подсвечен твой, серым — остальные рабочие. Если промахнулся: смотри, где цена разворачивалась несколько раз.</p>'
       : '')+
-    (mTask.marks?'<p style="color:#6b6088">Фигура размечена на графике. Она <b>действующая</b> — сформировалась у текущей цены, зайти ещё можно.</p>':'')+
+    (mTask.marks?'<p style="color:#93a3b3">Фигура размечена на графике. Она <b>действующая</b> — сформировалась у текущей цены, зайти ещё можно.</p>':'')+
     (mTask.expect && mTask.expect!==mTask.fdir
       ? '<div class="note"><b>⚠️ Фигура не отработала.</b> Ты определил её правильно, но цена пошла против. '+
         'Так бывает — и это главное правило Урока 5: <b>паттерн это вероятность, а не гарантия.</b> Поэтому и нужен стоп.</div>'
